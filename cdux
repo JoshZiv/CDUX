@@ -55,12 +55,15 @@ function cdux_main () {
 
     # defualt values
     # panes - tracks number of panes in a window
-    panes=1
+    panes=$(tmux display-message -p '#{window_panes}')
     # window_counter - counts number of windows in session
-    window_count=1
+    window_count=$(tmux display-message -p '#{session_windows}')
     # window - identifies the current window index we want to add a pane to
-    window=0
-
+    if [ "$panes" -eq "$pane_limit" ]; then
+        window=$window_count
+    else
+        window=$(tmux display-message -p '#I')
+    fi
     # for each argument passed in
     for x in "$@"; do
         # if this argument is not in the `skips` list
@@ -82,7 +85,7 @@ function cdux_main () {
             tmux new-window -t "$sessionName":"$window_count" -n "$abs_path" -c "$abs_path";
 
             # if we are not separating into windows, and we are not creating a new window to use
-            if [ "$windows" != "1" ] && [ $window_count -gt $window ]; then
+            if [ "$windows" != "1" ] && [ "$window_count" -gt "$window" ]; then
                 # join the pane to the current session, at the current window, with the pane name of the path
                 tmux join-pane -t "$sessionName":"$window" -s "$abs_path";
                 # change the layout, this helps stop tmux refusing to create a new pane because it's too small
