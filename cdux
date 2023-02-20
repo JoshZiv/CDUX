@@ -107,10 +107,10 @@ function cdux_main () {
                 # apply the chosen layout to the window since we can't do this when we move away from this window
                 equal_layout
                 # make our current window the same as the newest window, this prevents us from trying to join
-                # the a new window, that should be a new window, to the previous window.
+                # the new window, that SHOULD be a new window, to the previous window.
                 # if we have a new window, make it the same as our new window count, this then prevents the
                 # above condition from being true, which then stops the pane from being added, after which the
-                # window_count is increased since we know have our new window and we don't want to overwrite it
+                # window_count is increased since we now have our new window and we don't want to overwrite it
                 # with any new windows
                 window=$window_count
             fi
@@ -131,7 +131,7 @@ function handle_options () {
                 if is_int "$OPTARG"; then
                     # set pane_limit to the supplied value
                     pane_limit=$OPTARG
-                    # add the -c to the arguments to the list of arguments to skip later on
+                    # add the -c to the list of arguments to skip later on
                     skips="$skips -$o"
                     # do the same with the value
                     skips="$skips $OPTARG"
