@@ -56,8 +56,14 @@ function cdux_main () {
     # defualt values
     # panes - tracks number of panes in a window
     panes=$(tmux display-message -p '#{window_panes}')
+
+    # window_offset - user defined offset for window start index
+    tmux_base_index=()
+    IFS=' ' read -a tmux_base_index <<< "$(tmux show-options -g base-index)"
+    window_offset="${tmux_base_index[1]}"
+
     # window_counter - counts number of windows in session
-    window_count=$(tmux display-message -p '#{session_windows}')
+    window_count=$(( $(tmux display-message -p '#{session_windows}') + window_offset))
     # window - identifies the current window index we want to add a pane to
     if [ "$panes" -eq "$pane_limit" ]; then
         window=$window_count
